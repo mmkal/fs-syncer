@@ -49,6 +49,7 @@ export const parse = (jsonc: JSONC) => {
   for (const m of clashes || []) {
     commentCounter = Math.max(commentCounter, Number.parseInt(m.replace('//', ''), 10) + 1)
   }
+
   const lines = jsonc.split('\n')
   let blockStart = -1
   const withCommentValues = lines.map((s, i, arr) => {
@@ -76,7 +77,9 @@ export const parse = (jsonc: JSONC) => {
         }),
       }
       return JSON.stringify(addedJson).slice(1, -1) + ','
-    } else if (blockStart > -1) {
+    }
+
+    if (blockStart > -1) {
       return ''
     }
 
@@ -87,10 +90,11 @@ export const parse = (jsonc: JSONC) => {
   try {
     return JSON.parse(json)
   } catch (e: unknown) {
-    if (e instanceof SyntaxError && e.message.match(/position \d+$/)) {
-      const position = Number.parseInt(e.message.split(' ').slice(-1)[0], 10)
+    if (e instanceof SyntaxError && /position \d+$/.test(e.message)) {
+      const position = Number.parseInt(e.message.split(' ').at(-1) || '0', 10)
       e.message += `\n${json.slice(0, position)} --> ${json[position]} <-- ${json.slice(position + 1)}`
     }
+
     throw e
   }
 }
@@ -103,7 +107,7 @@ export const stringify = (obj: any, replacer: Array<string | number> | null = nu
   const lines = json.split('\n')
   const withComments = lines.map((s, i, arr) => {
     const trimmed = s.trim()
-    if (trimmed.match(/^"\/\/\d+ jsonc comment \w+"/)) {
+    if (/^"\/\/\d+ jsonc comment \w+"/.test(trimmed)) {
       const margin = s.slice(0, s.indexOf(`"`))
       // json json json json
       const jsonjson = JSON.parse(`{${trimmed.replace(/,?\r?$/, '')}}`)
@@ -111,8 +115,10 @@ export const stringify = (obj: any, replacer: Array<string | number> | null = nu
       if (normaliseJsonLine(nextLine) !== normaliseJsonLine(arr[i + 1])) {
         return `${margin}// comment on ${nextLine.split(':')[0].trim()} removed due to content change.`
       }
+
       return margin + comment
     }
+
     return s
   })
 
@@ -133,10 +139,10 @@ export const stringify = (obj: any, replacer: Array<string | number> | null = nu
  *   // this setting is set to true because of important reasons
  *   "originalSetting": true
  * }`
- * 
+ *
  * const newContent = JSONC.edit(oldContent, (config, comment) => {
  *   config.additionalSetting = {foo: 'bar'}
- * 
+ *
  *   comment(
  *     ['additionalSetting', 'foo'],
  *     'This value must be either "bar" or "baz" or things will explode!',
@@ -174,18 +180,19 @@ export const stringify = (obj: any, replacer: Array<string | number> | null = nu
  */
 export const edit = <T = any>(
   jsonc: string,
-  editor: (obj: T, addComment: (path: string[], comment: string) => void) => void
+  editor: (obj: T, addComment: (path: string[], comment: string) => void) => void,
 ): JSONC => {
   const obj = parse(jsonc as JSONC)
   // const indent = typeof space === 'string' ? space : ' '.repeat(space ?? 2)
-  const indent = jsonc?.split('\n')[1]?.match(/^\s+/)?.[0] || '  '
+  const indent = /^\s+/.exec(jsonc?.split('\n')[1])?.[0] || '  '
 
   const addComment = (path: string[], comment: string) => {
     const parent = get(obj, path.slice(0, -1))
-    const last = path[path.length - 1]
+    const last = path.at(-1)
     if (!parent) {
       throw new TypeError(`Can't add comment to path [${path}]. Parent path is not defined.`)
     }
+
     const parentJson = stringify(parent, null, indent)
 
     // this searches for key that needs to be commented. It should be reliable because
@@ -215,7 +222,7 @@ export const edit = <T = any>(
 
     const parentReplacement = parse(withExtraComment as JSONC)
     Object.keys(parent).forEach(k => {
-      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+      // eslint-disable-next-line mmkal/@typescript-eslint/no-dynamic-delete
       delete parent[k]
     })
     Object.keys(parentReplacement).forEach(k => {

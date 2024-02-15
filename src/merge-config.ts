@@ -1,8 +1,10 @@
-import {MergeStrategy} from './types'
 import * as JSONC from './jsonc'
+import {type MergeStrategy} from './types'
 import {uniq} from './util'
 
-const isMergeable = (obj: unknown) => obj && typeof obj === 'object' && obj.toString() === '[object Object]'
+const isMergeable = (obj: unknown): obj is Record<string, unknown> =>
+  // eslint-disable-next-line mmkal/@typescript-eslint/no-base-to-string
+  Boolean(obj && typeof obj === 'object' && obj.toString() === '[object Object]')
 
 /**
  * @experimental
@@ -14,7 +16,7 @@ export const mergeObjects = (left: any, right: any): any => {
     return keys.reduce((acc, next) => ({...acc, [next]: mergeObjects(left[next], right[next])}), {} as any)
   }
 
-  return typeof right === 'undefined' ? left : right
+  return right === undefined ? left : right
 }
 
 // todo: consider whether this is making too much of an assumption that we "prefer" the target content
@@ -32,6 +34,7 @@ export const mergeJsonConfigs: MergeStrategy = params => {
   if (!params.filepath.endsWith('.json')) {
     return params.targetContent || params.existingContent
   }
+
   let merged: any
   JSONC.edit(params.existingContent || '{}', existing => {
     JSONC.edit(params.targetContent || '{}', target => {
