@@ -8,6 +8,9 @@ devDependencies:
   '@types/eslint':
     specifier: 8.40.0
     version: 8.40.0
+  '@types/js-yaml':
+    specifier: ^4.0.9
+    version: 4.0.9
   '@types/lodash':
     specifier: ^4.14.202
     version: 4.14.202
@@ -20,6 +23,12 @@ devDependencies:
   eslint-plugin-mmkal:
     specifier: 0.3.0
     version: 0.3.0(eslint@8.56.0)(typescript@5.0.4)
+  js-yaml:
+    specifier: ^4.1.0
+    version: 4.1.0
+  json5:
+    specifier: ^2.2.3
+    version: 2.2.3
   lodash:
     specifier: ^4.17.21
     version: 4.17.21
@@ -1001,6 +1010,10 @@ packages:
 
   /@types/js-yaml@3.12.5:
     resolution: {integrity: sha512-JCcp6J0GV66Y4ZMDAQCXot4xprYB+Zfd3meK9+INSJeVZwJmHAW30BBEEkPzXswMXuiyReUGOP3GxrADc9wPww==}
+    dev: true
+
+  /@types/js-yaml@4.0.9:
+    resolution: {integrity: sha512-k4MGaQl5TGo/iipqb2UDG2UwjXziSWkh0uysQelTlJpX1qGlpUZYm8PnO4DxG1qBomtJUdYJ6qR6xdIah10JLg==}
     dev: true
 
   /@types/json-schema@7.0.15:

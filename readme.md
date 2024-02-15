@@ -106,7 +106,7 @@ test('files are modified', async () => {
 })
 ```
 
-`fixture.yaml()` is a helper that returns a yaml string representing the file tree. It's designed to be human-readable rather than a full implementation of the yaml spec though!
+`fixture.yaml()` is a helper that returns a yaml string representing the file tree. It's intended to be human-readable and familiar, and should not be relied on to be valid yaml, it's mostly for test snapshots.
 
 Let's assume the test file containing this test is called `my-test-file.test.ts`. When run, the above test will generate a directory `fixtures/my-test-file.test.ts/files-are-modified` next to the test file. The directory structure described in `targetState` will be created inside that folder. The test above might end up looking something like when run:
 

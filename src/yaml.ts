@@ -1,6 +1,6 @@
 /**
- * @experimental Prints an object to yaml, or at least something like it. Not intended to be spec-compliant.
- * It's really just used for outputting readable jest snapshots.
+ * @experimental Prints an object to yaml, or at least something like it. Not intended to be fully spec-compliant.
+ * It's really just used for outputting readable test snapshots.
  */
 export const yamlishPrinter = (val: any, tab = '  ') => {
   const buffer: string[] = []
@@ -9,8 +9,26 @@ export const yamlishPrinter = (val: any, tab = '  ') => {
       return
     }
 
+    if (Array.isArray(node)) {
+      if (node.length === 0) {
+        buffer.push('[]')
+        return
+      }
+
+      node.forEach(e => {
+        buffer.push('\n' + tab.repeat(indent) + '- ')
+        printNode(e, indent + 1)
+      })
+      return
+    }
+
     if (node && typeof node === 'object') {
       const entries = Object.entries(node)
+      if (entries.length === 0) {
+        buffer.push('{}')
+        return
+      }
+
       // .sort((...items) => {
       //   const keys = items.map(e => (e[1] && typeof e[1] === 'object' ? 'z' : typeof e[1]))
       //   return keys[0].localeCompare(keys[1])
@@ -22,7 +40,7 @@ export const yamlishPrinter = (val: any, tab = '  ') => {
       return
     }
 
-    if (typeof node === 'string' && node.includes('\n')) {
+    if (typeof node === 'string' && /\s/.test(node) && /^\S/.test(node)) {
       buffer.push('|-\n')
       node.split('\n').forEach((line, i, arr) => {
         buffer.push(tab.repeat(indent) + line + (i === arr.length - 1 ? '' : '\n'))
@@ -30,6 +48,12 @@ export const yamlishPrinter = (val: any, tab = '  ') => {
       return
     }
 
+    if (typeof node === 'string') {
+      buffer.push(JSON.stringify(node?.toString()))
+      return
+    }
+
+    // eslint-disable-next-line mmkal/@typescript-eslint/no-unsafe-argument
     buffer.push(node?.toString())
   }
 

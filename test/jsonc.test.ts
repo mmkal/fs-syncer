@@ -1,3 +1,4 @@
+import * as JSON5 from 'json5'
 import {test, expect} from 'vitest'
 import * as JSONC from '../src/jsonc'
 import {dedent} from '../src/util'
@@ -179,4 +180,22 @@ test('helpful errors for invalid syntax', () => {
     [SyntaxError: Expected ':' after property name in JSON at position 9
     {"foo': " --> b <-- ar"}]
   `)
+})
+
+test.each([
+  ['pojo', {a: 1}],
+  ['with whitespace', {a: 'aaa bbb cc'}],
+  ['with multiline string', {hello: 'aaa\nbbb\nccc'}],
+  ['with weird indentation', {a: '  aaaa\nbbb\n  ccc'}],
+  ['with null', {a: null}],
+  ['with empty string', {a: ''}],
+  ['with empty array', {a: []}],
+  ['with empty object', {a: {}}],
+  ['with nested object', {a: {b: {c: 1, d: {e: null}}, x: 'y'}}],
+  ['with nested array', {a: [1, 2, 3]}],
+  ['with nested array of objects', {a: [{b: 1}, {c: 2}]}],
+] as Array<[string, any]>)('outputs valid json5 for %j', (_name, input) => {
+  const output = JSON.stringify(input)
+
+  expect(JSON5.parse(output), JSON.stringify(output)).toEqual(input)
 })

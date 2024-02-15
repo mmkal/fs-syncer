@@ -6,6 +6,7 @@
     ],
     "target": "es2022",
     "module": "NodeNext",
+    "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
     "noErrorTruncation": true,

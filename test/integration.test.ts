@@ -64,14 +64,7 @@ test('dedent can be disabled using mergeStrategy', () => {
 
   expect(syncer.yaml()).toMatchInlineSnapshot(`
     "---
-    foo.js: |-
-
-              export const foo = () => {
-                if (Math.random() > 0.5) {
-                  console.log('foo')
-                }
-              }
-    "
+    foo.js: "\\n        export const foo = () => {\\n          if (Math.random() > 0.5) {\\n            console.log('foo')\\n          }\\n        }\\n      ""
   `)
 })
 

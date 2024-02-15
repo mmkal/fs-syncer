@@ -173,8 +173,10 @@ test('merge config merge strategy', () => {
   // we should see the team settings merged into the user settings
   expect(syncer.yaml()).toMatchInlineSnapshot(`
     "---
-    .eslintrc.js: module.exports = require('@your-company/shared-configs/eslint-config')
-    jest.config.js: module.exports = require('@your-company/shared-configs/jest-config')
+    .eslintrc.js: |-
+      module.exports = require('@your-company/shared-configs/eslint-config')
+    jest.config.js: |-
+      module.exports = require('@your-company/shared-configs/jest-config')
     package.json: |-
       {
         "scripts": {
