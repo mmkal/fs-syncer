@@ -167,8 +167,6 @@ describe('config merge strategy', () => {
     // first write the existing user code, this is just test setup though
     fsSyncer.testFixture({expect, targetState: specificProjectfileTree}).sync()
 
-    // expect(1).toEqual(0)
-
     const syncer = fsSyncer.testFixture({expect, targetState: sharedSettings, mergeStrategy: mergeJsonConfigs})
 
     syncer.sync()

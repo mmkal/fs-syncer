@@ -7,4 +7,5 @@ coverage
 package-lock.json
 yarn.lock
 
-test/**/fixtures
+test/fixtures
+test/generated

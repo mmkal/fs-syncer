@@ -7,7 +7,7 @@ import {yamlishPrinter} from './yaml'
 
 export * from './types'
 
-export {jestFixture, testFixture} from './jest'
+export {jestFixture, testFixture} from './testing'
 
 export * as JSONC from './jsonc'
 
@@ -66,7 +66,7 @@ export const createFSSyncer = <T extends object>({
           ...state,
           [entry.name]: fs.statSync(subpath).isFile() ? fs.readFileSync(subpath).toString() : readdir(subpath),
         }
-      }, {})
+      }, {} as T)
     Object.defineProperty(result, fsSyncerFileTreeMarker, {value: 'directory', enumerable: false})
     return result
   }

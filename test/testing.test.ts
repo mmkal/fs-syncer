@@ -2,7 +2,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import {describe, test, expect} from 'vitest'
 import * as fsSyncer from '../src'
-import {wipe} from '../src/jest'
+import {wipe} from '../src/testing'
 
 test('fixture dir is created', () => {
   const fixture = fsSyncer.testFixture({
@@ -12,10 +12,10 @@ test('fixture dir is created', () => {
 
   fixture.sync()
 
-  expect(fs.existsSync(path.join(__dirname, 'fixtures', 'jest-fixture.test.ts', 'fixture-dir-is-created'))).toBe(true)
+  expect(fs.existsSync(path.join(__dirname, 'fixtures', 'testing.test.ts', 'fixture-dir-is-created'))).toBe(true)
   expect(
     fs
-      .readFileSync(path.join(__dirname, 'fixtures', 'jest-fixture.test.ts', 'fixture-dir-is-created', 'one.txt'))
+      .readFileSync(path.join(__dirname, 'fixtures', 'testing.test.ts', 'fixture-dir-is-created', 'one.txt'))
       .toString()
       .trim(),
   ).toBe('uno')
@@ -29,15 +29,13 @@ test('wipe() deletes existing files', () => {
 
   before.sync()
 
-  expect(
-    fs.readdirSync(path.join(__dirname, 'fixtures', 'jest-fixture.test.ts', 'wipe-deletes-existing-files')),
-  ).toEqual(['one.txt'])
+  expect(fs.readdirSync(path.join(__dirname, 'fixtures', 'testing.test.ts', 'wipe-deletes-existing-files'))).toEqual([
+    'one.txt',
+  ])
 
   wipe(expect)
 
-  expect(
-    fs.readdirSync(path.join(__dirname, 'fixtures', 'jest-fixture.test.ts', 'wipe-deletes-existing-files')),
-  ).toEqual([])
+  expect(fs.readdirSync(path.join(__dirname, 'fixtures', 'testing.test.ts', 'wipe-deletes-existing-files'))).toEqual([])
 })
 
 describe('A suite', () => {
@@ -51,12 +49,7 @@ describe('A suite', () => {
 
     expect(
       fs.existsSync(
-        path.join(
-          __dirname,
-          'fixtures',
-          'jest-fixture.test.ts',
-          'a-suite-another-test-doesn-t-have-nice-path-formatting',
-        ),
+        path.join(__dirname, 'fixtures', 'testing.test.ts', 'a-suite-another-test-doesn-t-have-nice-path-formatting'),
       ),
     ).toBe(true)
     expect(
@@ -65,7 +58,7 @@ describe('A suite', () => {
           path.join(
             __dirname,
             'fixtures',
-            'jest-fixture.test.ts',
+            'testing.test.ts',
             'a-suite-another-test-doesn-t-have-nice-path-formatting',
             'two.txt',
           ),
