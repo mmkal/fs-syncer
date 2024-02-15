@@ -1,6 +1,6 @@
 {
   "name": "fs-syncer",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "A helper to recursively read and write text files to a specified directory",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
