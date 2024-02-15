@@ -1,0 +1,31 @@
+{
+  "name": "fs-syncer",
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "bin": "dist/bin.js",
+  "files": [
+    "dist",
+    "*.md"
+  ],
+  "author": "mmkal",
+  "scripts": {
+    "copy-config": "copy-config --repo mmkal/copy-config",
+    "eslint": "eslint --ext '.ts,.js,.md'",
+    "lint": "tsc && eslint .",
+    "build": "rm -rf dist && tsc -p tsconfig.lib.json",
+    "prepare": "pnpm build",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@types/eslint": "8.40.0",
+    "@types/lodash": "^4.14.202",
+    "@types/node": "^20.11.17",
+    "eslint": "^8.56.0",
+    "eslint-plugin-mmkal": "0.3.0",
+    "lodash": "^4.17.21",
+    "memfs": "^4.7.0",
+    "np": "github:mmkal/np#pnpm",
+    "typescript": "5.0.4",
+    "vitest": "^1.2.2"
+  }
+}
