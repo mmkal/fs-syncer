@@ -6,8 +6,8 @@ settings:
 
 devDependencies:
   '@types/eslint':
-    specifier: 8.40.0
-    version: 8.40.0
+    specifier: 8.56.2
+    version: 8.56.2
   '@types/lodash':
     specifier: ^4.14.202
     version: 4.14.202
@@ -945,13 +945,6 @@ packages:
 
   /@types/dedent@0.7.0:
     resolution: {integrity: sha512-EGlKlgMhnLt/cM4DbUSafFdrkeJoC9Mvnj0PUCU7tFmTjMjNRT957kXCx0wYm3JuEq4o4ZsS5vG+NlkM2DMd2A==}
-    dev: true
-
-  /@types/eslint@8.40.0:
-    resolution: {integrity: sha512-nbq2mvc/tBrK9zQQuItvjJl++GTN5j06DaPtp3hZCpngmG6Q3xoyEmd0TwZI0gAy/G1X0zhGBbr2imsGFdFV0g==}
-    dependencies:
-      '@types/estree': 1.0.5
-      '@types/json-schema': 7.0.15
     dev: true
 
   /@types/eslint@8.56.2:
