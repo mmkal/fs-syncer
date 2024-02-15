@@ -2,11 +2,8 @@
 
 A helper to recursively read and write text files to a specified directory.
 
-<!-- codegen:start {preset: badges} -->
-[![Node CI](https://github.com/mmkal/ts/workflows/Node%20CI/badge.svg)](https://github.com/mmkal/ts/actions?query=workflow%3A%22Node+CI%22)
-[![codecov](https://codecov.io/gh/mmkal/ts/branch/main/graph/badge.svg)](https://codecov.io/gh/mmkal/ts/tree/main/packages/fs-syncer)
+[![CI](https://github.com/mmkal/ts/workflows/ci/badge.svg)](https://github.com/mmkal/ts/actions?query=workflow%3A%22Node+CI%22)
 [![npm version](https://badge.fury.io/js/fs-syncer.svg)](https://npmjs.com/package/fs-syncer)
-<!-- codegen:end -->
 
 
 ## The idea
@@ -74,7 +71,7 @@ syncer.sync() // 'extraneous.txt' will now have been removed
 syncer.write() // like `syncer.sync()`, but doesn't remove extraneous files
 ```
 
-## Usage with jest
+## Usage with vitest or jest
 
 ⚠️⚠️⚠️ This feature is new and experimental - if you try it out, be aware that the API is in flux. Feedback is welcome! ⚠️⚠️⚠️
 
@@ -83,12 +80,13 @@ If you happen to want to use this in a jest test, there's an opinionated helper 
 Let's say you want to test a file modification tool, which appends `// comments` to all the files it finds under a certain directory, and also creates a log file:
 
 ```js
-import {jestFixture} from 'fs-syncer'
+import {testFixture} from 'fs-syncer'
 
 import {fileModificationToolThatYouWantToTest} from '../src/your-library'
 
 test('files are modified', async () => {
-  const fixture = jestFixture({
+  const fixture = testFixture({
+    expect,
     targetState: {
       'file1.txt': 'hello I am a file',
       nested: {
@@ -113,12 +111,13 @@ test('files are modified', async () => {
 Let's assume the test file containing this test is called `my-test-file.test.ts`. When run, the above test will generate a directory `fixtures/my-test-file.test.ts/files-are-modified` next to the test file. The directory structure described in `targetState` will be created inside that folder. The test above might end up looking something like when run:
 
 ```js
-import {jestFixture} from 'fs-syncer'
+import {testFixture} from 'fs-syncer'
 
 import {fileModificationToolThatYouWantToTest} from '../src/your-library'
 
 test('files are modified', async () => {
-  const fixture = jestFixture({
+  const fixture = testFixture({
+    expect,
     targetState: {
       'file1.txt': 'hello I am a file',
       nested: {
