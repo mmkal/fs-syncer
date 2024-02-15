@@ -15,7 +15,7 @@ test('can use memfs', () => {
 
   expect(fs.existsSync(syncer.baseDir)).toBeFalsy()
   expect(vol.toJSON()).toMatchInlineSnapshot(`
-    Object {
+    {
       "/tmp/root.txt": "root",
       "/tmp/this/should/not/be/created/on/the/real/filesystem/one.txt": "1
     ",

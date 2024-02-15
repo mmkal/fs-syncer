@@ -1,11 +1,12 @@
 import * as fs from 'fs'
 import * as lodash from 'lodash'
 import * as path from 'path'
-import {test, expect} from 'vitest'
+import {describe, test, expect} from 'vitest'
 import * as fsSyncer from '../src'
 
 test('dedents by default', () => {
-  const syncer = fsSyncer.jestFixture({
+  const syncer = fsSyncer.testFixture({
+    expect,
     targetState: {
       'foo.js': `
         export const foo = () => {
@@ -27,12 +28,13 @@ test('dedents by default', () => {
           console.log('foo')
         }
       }
-      "
+    "
   `)
 })
 
 test('adds newline by default', () => {
-  const syncer = fsSyncer.jestFixture({
+  const syncer = fsSyncer.testFixture({
+    expect,
     targetState: {
       'test.txt': `abc`,
     },
@@ -44,7 +46,8 @@ test('adds newline by default', () => {
 })
 
 test('dedent can be disabled using mergeStrategy', () => {
-  const syncer = fsSyncer.jestFixture({
+  const syncer = fsSyncer.testFixture({
+    expect,
     mergeStrategy: params => params.targetContent,
     targetState: {
       'foo.js': `
@@ -62,18 +65,19 @@ test('dedent can be disabled using mergeStrategy', () => {
   expect(syncer.yaml()).toMatchInlineSnapshot(`
     "---
     foo.js: |-
-  
+
               export const foo = () => {
                 if (Math.random() > 0.5) {
                   console.log('foo')
                 }
               }
-            "
+    "
   `)
 })
 
 test('custom merge strategy', () => {
-  const syncer = fsSyncer.jestFixture({
+  const syncer = fsSyncer.testFixture({
+    expect,
     mergeStrategy: params => {
       if (params.filepath.includes('.vscode') && params.filepath.endsWith('.json')) {
         // IRL, you may want to use a parser which can handle comments in json
@@ -122,11 +126,11 @@ test('custom merge strategy', () => {
     .vscode: 
       settings.json: |-
         {
-          \\"custom.tool.settings\\": {
-            \\"userSetting\\": \\"xyz\\",
-            \\"teamSetting2\\": \\"default value overidden by user\\",
-            \\"teamSetting1\\": \\"default value 1\\",
-            \\"teamSetting3\\": \\"default value 3\\"
+          "custom.tool.settings": {
+            "userSetting": "xyz",
+            "teamSetting2": "default value overidden by user",
+            "teamSetting1": "default value 1",
+            "teamSetting3": "default value 3"
           }
         }"
   `)
@@ -134,7 +138,8 @@ test('custom merge strategy', () => {
 
 describe('ignore paths', () => {
   const setup = () =>
-    fsSyncer.jestFixture({
+    fsSyncer.testFixture({
+      expect,
       targetState: {
         excluded: {
           'a.txt': 'aaa',
@@ -163,17 +168,14 @@ describe('ignore paths', () => {
   test('ignore paths', () => {
     setup().sync()
 
-    const ignoreExcludedDirs = fsSyncer.jestFixture({
-      targetState: {},
-      exclude: ['excluded'],
-    })
+    const ignoreExcludedDirs = fsSyncer.testFixture({expect, targetState: {}, exclude: ['excluded']})
 
     expect(ignoreExcludedDirs.yaml()).toMatchInlineSnapshot(`
       "---
       included: 
         d.txt: |-
           ddd
-    
+
         alsoincluded: 
           e.txt: |-
             eee
@@ -181,36 +183,33 @@ describe('ignore paths', () => {
       nested: 
         b.txt: |-
           bbb
-    
+
       src: 
         foo.js: |-
           console.log('foo')
-    
+
         nestedjs: 
           bar.js: |-
             console.log('bar')
-            "
+      "
     `)
   })
 
   test('can whitelist folders', () => {
     setup().sync()
 
-    const ignoreExcludedDirs = fsSyncer.jestFixture({
-      targetState: {},
-      exclude: [/^((?!src).)*$/],
-    })
+    const ignoreExcludedDirs = fsSyncer.testFixture({expect, targetState: {}, exclude: [/^((?!src).)*$/]})
 
     expect(ignoreExcludedDirs.yaml()).toMatchInlineSnapshot(`
       "---
       src: 
         foo.js: |-
           console.log('foo')
-    
+
         nestedjs: 
           bar.js: |-
             console.log('bar')
-            "
+      "
     `)
   })
 })

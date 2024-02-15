@@ -1,13 +1,13 @@
 import * as realFs from 'fs'
-import * as path from 'path'
 import * as os from 'os'
+import * as path from 'path'
+import {fsSyncerFileTreeMarker, type CreateSyncerParams, type MergeStrategy} from './types'
 import {getPaths, get, dedent, tryCatch} from './util'
-import {fsSyncerFileTreeMarker, CreateSyncerParams, MergeStrategy} from './types'
 import {yamlishPrinter} from './yaml'
 
 export * from './types'
 
-export {jestFixture} from './jest'
+export {jestFixture, testFixture} from './jest'
 
 export * as JSONC from './jsonc'
 
@@ -66,7 +66,7 @@ export const createFSSyncer = <T extends object>({
           ...state,
           [entry.name]: fs.statSync(subpath).isFile() ? fs.readFileSync(subpath).toString() : readdir(subpath),
         }
-      }, {} as T)
+      }, {})
     Object.defineProperty(result, fsSyncerFileTreeMarker, {value: 'directory', enumerable: false})
     return result
   }

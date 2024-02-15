@@ -46,23 +46,23 @@ test('parse jsonc', () => {
   expect(JSONC.stringify(parsed)).toMatchInlineSnapshot(`
     "{
       // inline comment
-      \\"a\\": 1,
+      "a": 1,
       /* block comment on single line */
-      \\"b\\": 2,
+      "b": 2,
       /**
        * multiline block comment
        */
-      \\"c\\": 3,
+      "c": 3,
       //1 comment starting with a number
-      \\"d\\": {
+      "d": {
         // nested comment
-        \\"e\\": 5
+        "e": 5
       },
-      // comment on \\"deleteable\\" removed due to content change.
-      // comment on \\"editable\\" removed due to content change.
-      \\"editable\\": \\"xyz\\",
-      \\"f\\": 6,
-      \\"extraProp\\": \\"added dynamically\\"
+      // comment on "deleteable" removed due to content change.
+      // comment on "editable" removed due to content change.
+      "editable": "xyz",
+      "f": 6,
+      "extraProp": "added dynamically"
     }"
   `)
 })
@@ -100,26 +100,26 @@ test('edit jsonc', () => {
     )
 
     expect(() => comment(['non', 'existent', 'path'], 'are ignored')).toThrowErrorMatchingInlineSnapshot(
-      `"Can't add comment to path [non,existent,path]. Parent path is not defined."`,
+      `[TypeError: Can't add comment to path [non,existent,path]. Parent path is not defined.]`,
     )
   })
 
   expect(edited).toMatchInlineSnapshot(`
     "{
       // foobar comment
-      \\"foo\\": \\"bar\\",
-      \\"nested\\": {
+      "foo": "bar",
+      "nested": {
         // nested comment
-        \\"a\\": 1,
-        \\"nestedMore\\": {
-          \\"x\\": \\"y\\",
+        "a": 1,
+        "nestedMore": {
+          "x": "y",
           /**
            * A verbose, multiline comment
            * about 'y'
            */
-          \\"y\\": \\"z\\",
+          "y": "z",
           // This was added because of important reasons you should know about
-          \\"newProp\\": 123
+          "newProp": 123
         }
       }
     }"
@@ -142,6 +142,7 @@ test('edit jsonc respects existing indentation', () => {
   })
 
   expect(edited).toEqual(
+    // eslint-disable-next-line mmkal/unicorn/template-indent
     dedent(`
       {
       \t// Comment 1
@@ -151,8 +152,7 @@ test('edit jsonc respects existing indentation', () => {
       \t\t// Comment 2
       \t\t"x": "y"
       \t}
-      }
-    `),
+      }`),
   )
 })
 
@@ -168,15 +168,15 @@ test('edit jsonc double-space indents by default', () => {
   expect(edited).toMatchInlineSnapshot(`
     "{
       // Comment for a1
-      \\"a1\\": \\"b1\\",
-      \\"a2\\": \\"b2\\"
+      "a1": "b1",
+      "a2": "b2"
     }"
   `)
 })
 
 test('helpful errors for invalid syntax', () => {
   expect(() => JSONC.parse(`{"foo': "bar"}` as JSONC.JSONC)).toThrowErrorMatchingInlineSnapshot(`
-    "Unexpected token b in JSON at position 9
-    {\\"foo': \\" --> b <-- ar\\"}"
+    [SyntaxError: Expected ':' after property name in JSON at position 9
+    {"foo': " --> b <-- ar"}]
   `)
 })

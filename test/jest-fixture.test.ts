@@ -1,11 +1,12 @@
 import * as fs from 'fs'
 import * as path from 'path'
-import {test, expect} from 'vitest'
+import {describe, test, expect} from 'vitest'
 import * as fsSyncer from '../src'
 import {wipe} from '../src/jest'
 
 test('fixture dir is created', () => {
-  const fixture = fsSyncer.jestFixture({
+  const fixture = fsSyncer.testFixture({
+    expect,
     targetState: {'one.txt': 'uno'},
   })
 
@@ -21,7 +22,8 @@ test('fixture dir is created', () => {
 })
 
 test('wipe() deletes existing files', () => {
-  const before = fsSyncer.jestFixture({
+  const before = fsSyncer.testFixture({
+    expect,
     targetState: {'one.txt': '1'},
   })
 
@@ -31,7 +33,7 @@ test('wipe() deletes existing files', () => {
     fs.readdirSync(path.join(__dirname, 'fixtures', 'jest-fixture.test.ts', 'wipe-deletes-existing-files')),
   ).toEqual(['one.txt'])
 
-  wipe()
+  wipe(expect)
 
   expect(
     fs.readdirSync(path.join(__dirname, 'fixtures', 'jest-fixture.test.ts', 'wipe-deletes-existing-files')),
@@ -40,7 +42,8 @@ test('wipe() deletes existing files', () => {
 
 describe('A suite', () => {
   test(`another test (doesn't have nice path formatting!)`, () => {
-    const fixture = fsSyncer.jestFixture({
+    const fixture = fsSyncer.testFixture({
+      expect,
       targetState: {'two.txt': 'dos'},
     })
 
@@ -74,7 +77,8 @@ describe('A suite', () => {
 })
 
 test('yaml snapshot', () => {
-  const fixture = fsSyncer.jestFixture({
+  const fixture = fsSyncer.testFixture({
+    expect,
     targetState: {
       'singleline.js': `console.log('hello world')`,
       'multiline.py':
@@ -99,22 +103,22 @@ test('yaml snapshot', () => {
   expect(fixture.yaml()).toMatchInlineSnapshot(`
     "---
     multiline.py: |-
-      if __name__ == \\"__main__\\":
-        print(\\"hello world\\")
-  
+      if __name__ == "__main__":
+        print("hello world")
+
     singleline.js: |-
       console.log('hello world')
-  
+
     nested: 
       directory: 
         withfile.txt: |-
           hello world
-  
+
         with: 
           multiline.rs: |-
             fn main() {
-              println!(\\"hello world\\");
+              println!("hello world");
             }
-            "
+    "
   `)
 })

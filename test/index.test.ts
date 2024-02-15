@@ -17,10 +17,10 @@ test('sync', () => {
   syncer.sync()
 
   expect(syncer.read()).toMatchInlineSnapshot(`
-    Object {
+    {
       "a.txt": "a",
       "b.txt": "bee",
-      "c": Object {
+      "c": {
         "d.txt": "dee",
         "e.txt": "ee",
         "f.txt": "ef",

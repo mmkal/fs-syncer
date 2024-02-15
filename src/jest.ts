@@ -3,7 +3,19 @@ import * as path from 'path'
 import {type CreateSyncerParams} from './types'
 
 export interface JestExpectLike {
-  getState: () => {currentTestName: string; testPath: string}
+  getState: () => {currentTestName?: string; testPath?: string}
+}
+
+const getState = (expect: JestExpectLike) => {
+  const {currentTestName, testPath} = expect.getState()
+  if (!currentTestName || !testPath) {
+    throw new Error('expect.getState().currentTestName and expect.getState().testPath are required')
+  }
+
+  return {
+    currentTestName: currentTestName.split(' > ').slice(1).join(' > '),
+    testPath,
+  }
 }
 
 type TestFixtureParams = Omit<CreateSyncerParams<any>, 'baseDir'> & {
@@ -25,25 +37,27 @@ export const testFixture = ({expect, ...params}: TestFixtureParams) => {
 }
 
 /** @deprecated use `testFixture` and pass in expect manually */
-export const jestFixture = (params: Omit<TestFixtureParams, 'expect'>) =>
-  testFixture({expect: (global as any).expect, ...params})
+export const jestFixture = (params: TestFixtureParams) =>
+  testFixture({...params, expect: params.expect || (global as any).expect})
 
-export const baseDir = (expect: JestExpectLike) =>
-  path.join(
-    path.dirname(expect.getState().testPath),
+export const baseDir = (expect: JestExpectLike) => {
+  const {testPath, currentTestName} = getState(expect)
+
+  return path.join(
+    path.dirname(testPath),
     'fixtures',
-    path.basename(expect.getState().testPath),
-    expect
-      .getState()
-      .currentTestName.toLowerCase()
+    path.basename(testPath),
+    currentTestName
+      .toLowerCase()
       .replaceAll(/[^\da-z]/g, '-') // convert everything non-alphanumeric to dashes
       .replaceAll(/-+/g, '-') // remove double-dashes
       .replace(/^-*/, '') // remove dashes at the start
       .replace(/-*$/, ''), // remove dashes at the end
   )
+}
 
 export const wipe = (expect: JestExpectLike) =>
   createFSSyncer({
-    baseDir: path.join(path.dirname(expect.getState().testPath), 'fixtures'),
+    baseDir: path.join(path.dirname(getState(expect).testPath), 'fixtures'),
     targetState: {},
   }).sync()

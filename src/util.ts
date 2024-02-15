@@ -20,19 +20,21 @@ export const dedent = (str: string) => {
   if (lines.length === 1 || lines[0]) {
     return str
   }
+
   lines.shift()
-  if (lines[lines.length - 1].trim() === '') {
+  if (lines.at(-1)?.trim() === '') {
     lines[lines.length - 1] = ''
   }
 
   const commonMargin =
-    lines.filter(Boolean).reduce((common, next) => {
+    lines.filter(Boolean).reduce<string | null>((common, next) => {
       const lineMargin = next.split(/\S/)[0]
       if (typeof common === 'string') {
         return lineMargin.startsWith(common) ? common : common.startsWith(lineMargin) ? lineMargin : ''
       }
+
       return lineMargin
-    }, null as string | null) || ''
+    }, null) || ''
 
   return lines.map(line => line.replace(commonMargin, '')).join('\n')
 }
@@ -44,6 +46,7 @@ export const uniq = (array: string[]) => {
     if (set.has(item)) {
       return false
     }
+
     set.add(item)
     return true
   })
@@ -51,7 +54,7 @@ export const uniq = (array: string[]) => {
 
 export const tryCatch = <T, U = undefined>(
   fn: () => T,
-  onError: (error: unknown) => U = () => (undefined as any) as U
+  onError: (error: unknown) => U = () => undefined as any as U,
 ) => {
   try {
     return fn()

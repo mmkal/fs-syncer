@@ -38,9 +38,9 @@ export const yamlishPrinter = (val: any, tab = '  ') => {
     '---\n' +
     buffer
       .join('')
-      .trimStart()
       .split('\n')
       .map(line => (/^\s+$/.test(line) ? '' : line)) // remove lines that are just whitespace
       .join('\n')
+      .trimStart()
   )
 }

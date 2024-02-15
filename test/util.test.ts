@@ -1,22 +1,23 @@
+/* eslint-disable mmkal/unicorn/template-indent */
 import {test, describe, expect} from 'vitest'
 import {dedent, getPaths} from '../src/util'
 
 describe('getPaths', () => {
   test('nested object', () => {
     expect(getPaths({a: {b: {c: 1, d: {e: null}}, x: 'y'}})).toMatchInlineSnapshot(`
-      Array [
-        Array [
+      [
+        [
           "a",
           "b",
           "c",
         ],
-        Array [
+        [
           "a",
           "b",
           "d",
           "e",
         ],
-        Array [
+        [
           "a",
           "x",
         ],
@@ -67,12 +68,13 @@ describe('dedent', () => {
     `
 
     expect(dedent(withTabs)).toMatchInlineSnapshot(`
-      "const x = {
-      	a: 'a',
-      	b: {
-      		c: 'c
+      "	const x = {
+      		a: 'a',
+      		b: {
+      			c: 'c
+      		}
       	}
-      }
+
       "
     `)
   })
@@ -85,8 +87,7 @@ describe('dedent', () => {
 
     const withoutTrailing = `
       foo
-      bar
-    `
+      bar`
     expect(dedent(withTrailing)).toEqual('foo\nbar\n')
 
     expect(dedent(withoutTrailing)).toEqual('foo\nbar')
@@ -97,10 +98,9 @@ describe('dedent', () => {
   })
 
   test(`doesn't indent value with content on first line`, () => {
-    const withLeadingContent = `
-      foo
-            bar
-            baz
+    const withLeadingContent = `foo
+      bar
+      baz
     `
     expect(dedent(withLeadingContent)).toEqual(withLeadingContent)
   })
