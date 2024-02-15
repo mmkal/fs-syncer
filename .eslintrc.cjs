@@ -6,7 +6,8 @@ module.exports = {
   overrides: [
     ...recommended.overrides,
     {
-      files: ['*.md'],
+      // todo: reenable, maybe requires eslint-plugin-markdown upgrade?
+      files: ['DISABLED*.md'],
       rules: {
         'mmkal/unicorn/filename-case': 'off',
         'mmkal/prettier/prettier': 'off',
@@ -21,5 +22,3 @@ module.exports = {
     'mmkal/@typescript-eslint/prefer-reduce-type-parameter': 'off', // a bad rule, prevents casting that is sometimes needed
   },
 }
-
-// console.dir(module.exports, {depth: 100})
