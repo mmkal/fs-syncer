@@ -1,5 +1,5 @@
 /**
- * @experimental Prints an object to yaml, or at least something like it. Not intended to be fully spec-compliant.
+ * @experimental Prints an object to yaml, or at least something like it. May not be fully spec-compliant.
  * It's really just used for outputting readable test snapshots.
  */
 export const yamlishPrinter = (val: any, tab = '  ') => {
