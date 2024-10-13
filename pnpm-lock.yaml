@@ -31,7 +31,7 @@ devDependencies:
     version: 4.17.21
   memfs:
     specifier: ^4.7.0
-    version: 4.13.0
+    version: 4.14.0
   np:
     specifier: github:mmkal/np#c8cba01a6730dbc0fad9529b449e214d84ab46be
     version: github.com/mmkal/np/c8cba01a6730dbc0fad9529b449e214d84ab46be(typescript@5.0.4)
@@ -4688,8 +4688,8 @@ packages:
     resolution: {integrity: sha512-AW4DRS3QbBayY/jJmD8437V1Gombjf8RSOUCMFBuo5iHi58AGEgVCKQ+ezHkZZDpAQS75hcBMpLqjpJTjtUL7w==}
     dev: true
 
-  /memfs@4.13.0:
-    resolution: {integrity: sha512-dIs5KGy24fbdDhIAg0RxXpFqQp3RwL6wgSMRF9OSuphL/Uc9a4u2/SDJKPLj/zUgtOGKuHrRMrj563+IErj4Cg==}
+  /memfs@4.14.0:
+    resolution: {integrity: sha512-JUeY0F/fQZgIod31Ja1eJgiSxLn7BfQlCnqhwXFBzFHEw63OdLK7VJUJ7bnzNsWgCyoUP5tEp1VRY8rDaYzqOA==}
     engines: {node: '>= 4.0.0'}
     dependencies:
       '@jsonjoy.com/json-pack': 1.1.0(tslib@2.7.0)
