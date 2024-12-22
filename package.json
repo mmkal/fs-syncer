@@ -27,8 +27,8 @@
     "json5": "^2.2.3",
     "lodash": "^4.17.21",
     "memfs": "^4.7.0",
-    "np": "github:mmkal/np#c8cba01a6730dbc0fad9529b449e214d84ab46be",
-    "typescript": "5.0.4",
+    "np": "github:mmkal/np#e18936aa459cd76319786aaa30ebdb29b638a87f",
+    "typescript": "5.7.2",
     "vitest": "^1.2.2"
   }
 }
