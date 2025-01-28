@@ -22,7 +22,7 @@
     "@types/lodash": "^4.14.202",
     "@types/node": "^20.11.17",
     "eslint": "^8.56.0",
-    "eslint-plugin-mmkal": "0.3.0",
+    "eslint-plugin-mmkal": "0.10.1",
     "js-yaml": "^4.1.0",
     "json5": "^2.2.3",
     "lodash": "^4.17.21",
